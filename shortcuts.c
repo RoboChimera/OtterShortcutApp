@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+
+#include <lua.h>
+#include <luaxlib.h>
+#include <lualib.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *grid;
@@ -22,6 +26,22 @@ void button_click(GtkWidget *widget, gpointer data) {
 	int *shortcut = (int *)data;
 	do_shortcut(*shortcut);
 }
+
+/*
+void lua_config() {
+	lua_State *L;
+
+	L = luaL_newstate();
+	luaL_openlibs(L);
+	if (luaL_dofile(L, "config.lua")) {
+		printf("Config is invalid", lua_tostring(L, -1));
+		lua_close(L);
+		return 0;
+	}
+
+	lua_close(L);
+}
+*/
 
 int main(int argc, char *argv[]) {
     int shortcutID1 = 1;

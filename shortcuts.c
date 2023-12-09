@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 
     // Create the main window
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "Shortcuts");
+    gtk_window_set_title(GTK_WINDOW(window), "OtterPanel");
     gtk_window_set_titlebar(GTK_WINDOW(window), false);
 //    gtk_window_set_default_size(GTK_WINDOW(window), 300, 200);
 

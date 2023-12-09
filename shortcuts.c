@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <gtk/gtk.h>
 
 #include "config.h"
@@ -16,6 +17,20 @@ void buttonClick(GtkWidget *widget, gpointer data) {
 }
 
 int main(int argc, char *argv[]) {
+    // Unveil and Pledge
+    #ifdef __OpenBSD__
+    int result = {
+	    unveil("/usr/local/bin", "r+x"),
+	    unveil("/bin", "r+x"),
+	    unveil("/sbin", "r+x"),
+	    unveil("~/.local/bin", "r+x"),
+    };
+    if (result != 0) {
+	    perror("Failed to unveil\n");
+	    return 1;
+    }
+    printf("Successfully enabled unveil\n");
+    #endif
 
     // Initialize GTK
     GtkWidget *window, *grid;
@@ -51,5 +66,6 @@ int main(int argc, char *argv[]) {
     gtk_main();
 
 
+    unveil(NULL, NULL);
     return 0;
 }

@@ -13,32 +13,16 @@ int y;
 void buttonClick(GtkWidget *widget, gpointer data) {
 	// Cast the data pointer to the ShortcutDef struct type
 	struct shortcutDef *shortcut = (struct shortcutDef *)data;
-	#ifdef __OpenBSD__
-	if (unveil("/usr/X11R6/bin", "r") == -1) {
-		perror("Failed to unveil\n");
-		return 1;
-	}
-
-	if (system(shortcut->action) == -1) {
-		perror("Failed to system\n");
-		return 1;
-	}
-	#endif
 	//system(shortcut->action);
 }
 
 int main(int argc, char *argv[]) {
-    // Unveil and Pledge
     #ifdef __OpenBSD__
-    int result = { unveil("/usr/local/bin", "r+x"),
-    };
-    if (result != 0) {
-	    perror("Failed to unveil\n");
-	    return 1;
+    if(pledge("rpath", NULL) == -1) {
+	    perror("Failed to pledge");
+	    reutrn 1;
     }
-    printf("Successfully enabled unveil\n");
     #endif
-
     // Initialize GTK
     GtkWidget *window, *grid;
     gtk_init(&argc, &argv);

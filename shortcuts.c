@@ -2,53 +2,26 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include <lua.h>
-#include <luaxlib.h>
-#include <lualib.h>
+#include "config.h"
 #include <gtk/gtk.h>
 
 static GtkWidget *grid;
-static GtkWidget *shortcut1;
+static GtkWidget *shortcut;
+int x;
+int y;
 
-void do_shortcut(int i) {
-	// Handles the actual shortcut cases
-	switch (i) {
-		case 1:
-			system("xterm -e top &");
-			break;
-		default:
-			system("echo 'Invalid Shortcut' &");
-			break;
-	}
+void buttonClick(GtkWidget *widget, gpointer data) {
+	// Cast the data pointer to the ShortcutDef struct type
+	struct shortcutDef *shortcut = (struct shortcutDef *)data;
+	system(shortcut->action);
 }
-
-void button_click(GtkWidget *widget, gpointer data) {
-	int *shortcut = (int *)data;
-	do_shortcut(*shortcut);
-}
-
-/*
-void lua_config() {
-	lua_State *L;
-
-	L = luaL_newstate();
-	luaL_openlibs(L);
-	if (luaL_dofile(L, "config.lua")) {
-		printf("Config is invalid", lua_tostring(L, -1));
-		lua_close(L);
-		return 0;
-	}
-
-	lua_close(L);
-}
-*/
 
 int main(int argc, char *argv[]) {
     int shortcutID1 = 1;
     int shortcutID2 = 2;
 
     // Initialize GTK
-    GtkWidget *window, *grid, *shortcut1;
+    GtkWidget *window, *grid;
     gtk_init(&argc, &argv);
 
     // Create the main window
@@ -57,20 +30,26 @@ int main(int argc, char *argv[]) {
     gtk_window_set_titlebar(GTK_WINDOW(window), false);
 //    gtk_window_set_default_size(GTK_WINDOW(window), 300, 200);
 
-    // Connect the "destroy" signal to the main window
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     //Adding the grid and buttons
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(window), grid);
 
-    shortcut1 = gtk_button_new_with_label("Execute top");
-    g_signal_connect(shortcut1, "clicked", G_CALLBACK(button_click), &shortcutID1);
-    gtk_grid_attach(GTK_GRID(grid), shortcut1, 0, 0, 1, 1);
+    for (int i = 0; i < sizeof(shortcutID) / sizeof(shortcutID[0]); ++i) {
+	    GtkWidget *shortcut;
+	    shortcut = gtk_button_new_with_label(shortcutID[i].label);
+	    g_signal_connect(shortcut, "clicked", G_CALLBACK(buttonClick), &shortcutID[i].id);
+	    gtk_grid_attach(GTK_GRID(grid), shortcut, x, y, 1, 1);
 
-    shortcut1 = gtk_button_new_with_label("shortcut1");
-    g_signal_connect(shortcut1, "clicked", G_CALLBACK(button_click), &shortcutID2);
-    gtk_grid_attach(GTK_GRID(grid), shortcut1, 1, 0, 1, 1);
+	    if (vertical == 0 && x != maxButtonsOnRow - 1) {
+		    x++;
+	    } else {
+		    y++;
+		    x = 0;
+	    }
+    }
+
     // Start the GTK main loop
     gtk_widget_show_all(window);
     gtk_main();

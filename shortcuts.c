@@ -1,9 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
+#include <gtk/gtk.h>
 
 #include "config.h"
-#include <gtk/gtk.h>
 
 static GtkWidget *grid;
 static GtkWidget *shortcut;
@@ -17,8 +16,6 @@ void buttonClick(GtkWidget *widget, gpointer data) {
 }
 
 int main(int argc, char *argv[]) {
-    int shortcutID1 = 1;
-    int shortcutID2 = 2;
 
     // Initialize GTK
     GtkWidget *window, *grid;
@@ -27,7 +24,6 @@ int main(int argc, char *argv[]) {
     // Create the main window
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "OtterPanel");
-    gtk_window_set_titlebar(GTK_WINDOW(window), false);
 //    gtk_window_set_default_size(GTK_WINDOW(window), 300, 200);
 
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);

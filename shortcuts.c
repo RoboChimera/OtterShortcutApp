@@ -17,7 +17,7 @@ void buttonClick(GtkWidget *widget, gpointer data) {
 	#ifdef __OpenBSD__
 		if(pledge("stdio rpath proc exec", NULL) == -1) {
 			perror("Failed to pledge");
-			return 1;
+			return;
 		}
 	#endif
 	system(shortcut->action);

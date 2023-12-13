@@ -5,15 +5,12 @@
 
 #include "config.h"
 
-static GtkWidget *grid;
-static GtkWidget *shortcut;
 int x;
 int y;
 
 void buttonClick(GtkWidget *widget, gpointer data) {
 	// Cast the data pointer to the ShortcutDef struct type
 	struct shortcutDef *shortcut = (struct shortcutDef *)data;
-	//system(shortcut->action);
 	#ifdef __OpenBSD__
 		if(pledge("stdio rpath proc exec", NULL) == -1) {
 			perror("Failed to pledge");
@@ -25,7 +22,7 @@ void buttonClick(GtkWidget *widget, gpointer data) {
 
 int main(int argc, char *argv[]) {
     // Initialize GTK
-    GtkWidget *window, *grid;
+    GtkWidget *window, *grid , *shortcut;
     gtk_init(&argc, &argv);
 
     // Create the main window

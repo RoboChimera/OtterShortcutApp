@@ -22,7 +22,7 @@ void buttonClick(GtkWidget *widget, gpointer data) {
 
 int main(int argc, char *argv[]) {
     // Initialize GTK
-    GtkWidget *window, *grid , *shortcut;
+    GtkWidget *window, *grid;
     gtk_init(&argc, &argv);
 
     // Create the main window
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(window), grid);
 
-    for (int i = 0; i < sizeof(shortcutID) / sizeof(shortcutID[0]); ++i) {
+    for (int i = 0; i < sizeof(shortcutID) / sizeof(shortcutID[0]); i++) {
 	    GtkWidget *shortcut;
 	    shortcut = gtk_button_new_with_label(shortcutID[i].label);
 	    g_signal_connect(shortcut, "clicked", G_CALLBACK(buttonClick), &shortcutID[i].id);
